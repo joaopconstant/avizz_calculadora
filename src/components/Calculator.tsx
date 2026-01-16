@@ -25,10 +25,10 @@ import { Separator } from "@/components/ui/separator";
 
 export default function Calculator() {
   const [faturamento, setFaturamento] = useState<number[] | number>([100000]);
-  const [taxaMaquina, setTaxaMaquina] = useState<string>("1.5"); // Storing as string to handle empty inputs easily
-  const [repasse, setRepasse] = useState<string>("60");
-  const [regime, setRegime] = useState<string>("lucro-presumido");
-  const [aliquotaManual, setAliquotaManual] = useState<string>("0");
+  const [taxaMaquina, setTaxaMaquina] = useState<number>(1.5);
+  const [repasse, setRepasse] = useState<number>(60);
+  const [regime, setRegime] = useState<string>("simples");
+  const [aliquotaManual, setAliquotaManual] = useState<number>(15);
 
   const currentRevenue = Array.isArray(faturamento)
     ? faturamento[0]
@@ -36,23 +36,21 @@ export default function Calculator() {
 
   // --- 2. Logic & Calculations ---
 
-  // Determine Tax Rate based on Regime
-  const getTaxRate = () => {
-    switch (regime) {
-      case "simples":
-        return 0.12;
-      case "lucro-presumido":
-        return 0.1633;
-      case "outro":
-        return (parseFloat(aliquotaManual) || 0) / 100;
-      default:
-        return 0.1633;
-    }
-  };
+  const taxOptions = [
+    { id: "simples", label: "Simples Nacional", value: 12 },
+    { id: "lucro-presumido", label: "Lucro Presumido", value: 16.33 },
+    { id: "outro", label: "Outro (Personalizado)", value: 0 },
+  ];
 
-  const taxRate = getTaxRate();
-  const machineRate = (parseFloat(taxaMaquina) || 0) / 100;
-  const splitRate = (parseFloat(repasse) || 0) / 100;
+  // Busca o valor baseado no ID selecionado
+  const selectedOption = taxOptions.find((opt) => opt.id === regime);
+
+  // Se for "outro", usa o valor manual. Se não, usa o valor da opção ou o padrão de 15%.
+  const currentTaxValue =
+    regime === "outro" ? aliquotaManual : selectedOption?.value || 12;
+  const taxRate = currentTaxValue / 100;
+  const machineRate = taxaMaquina / 100;
+  const splitRate = repasse / 100;
 
   // Imposto sobre TUDO
   const impostoSemSplit = currentRevenue * taxRate;
@@ -148,7 +146,7 @@ export default function Calculator() {
                     id="taxa-maquina"
                     type="number"
                     value={taxaMaquina}
-                    onChange={(e) => setTaxaMaquina(e.target.value)}
+                    onChange={(e) => setTaxaMaquina(Number(e.target.value))}
                     className="pl-3 pr-8"
                     step="0.1"
                   />
@@ -164,7 +162,7 @@ export default function Calculator() {
                     id="repasse"
                     type="number"
                     value={repasse}
-                    onChange={(e) => setRepasse(e.target.value)}
+                    onChange={(e) => setRepasse(Number(e.target.value))}
                     className="pl-3 pr-8"
                   />
                   <Percent className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
@@ -183,15 +181,11 @@ export default function Calculator() {
                   <SelectValue placeholder="Selecione o regime" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="simples">
-                    Simples Nacional (Anexo III - 12% est.)
-                  </SelectItem>
-                  <SelectItem value="lucro-presumido">
-                    Lucro Presumido (16.33% - Serviços)
-                  </SelectItem>
-                  <SelectItem value="outro">
-                    Outro (Inserir Manualmente)
-                  </SelectItem>
+                  {taxOptions.map((option) => (
+                    <SelectItem key={option.id} value={option.id}>
+                      {option.label} {option.value > 0 && `(${option.value}%)`}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -207,7 +201,7 @@ export default function Calculator() {
                     id="aliquota-manual"
                     type="number"
                     value={aliquotaManual}
-                    onChange={(e) => setAliquotaManual(e.target.value)}
+                    onChange={(e) => setAliquotaManual(Number(e.target.value))}
                     className="pl-3 pr-8"
                   />
                   <Percent className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
