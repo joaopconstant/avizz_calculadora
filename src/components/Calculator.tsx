@@ -32,7 +32,7 @@ export default function Calculator() {
 
   const taxOptions = [
     { id: "simples", label: "Simples Nacional", value: 12 },
-    { id: "lucro-presumido", label: "Lucro Presumido", value: 16 },
+    { id: "lucro-presumido", label: "Lucro Presumido", value: 17 },
     { id: "outro", label: "Outro", value: 0 },
   ];
 
