@@ -171,45 +171,48 @@ export default function Calculator() {
                   Parcela que vai para parceiros.
                 </p>
               </div>
-            </div>
-
-            {/* 4. Regime Tributário */}
-            <div className="space-y-2">
-              <Label>Regime Tributário</Label>
-              <Select value={regime} onValueChange={setRegime}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione o regime" />
-                </SelectTrigger>
-                <SelectContent>
-                  {taxOptions.map((option) => (
-                    <SelectItem key={option.id} value={option.id}>
-                      {option.label} {option.value > 0 && `(${option.value}%)`}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Manual Tax Rate Input if "Outro" selected */}
-            {regime === "outro" && (
-              <div className="space-y-2 animate-in fade-in slide-in-from-top-2">
-                <Label htmlFor="aliquota-manual">
-                  Alíquota de Imposto Estimada (%)
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="aliquota-manual"
-                    type="number"
-                    value={aliquotaManual}
-                    onChange={(e) => setAliquotaManual(Number(e.target.value))}
-                    className="pl-3 pr-8"
-                  />
-                  <Percent className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                </div>
+              <div className="space-y-2">
+                <Label>Regime Tributário</Label>
+                <Select value={regime} onValueChange={setRegime}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Selecione o regime" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {taxOptions.map((option) => (
+                      <SelectItem key={option.id} value={option.id}>
+                        {option.label}{" "}
+                        {option.value > 0 && `(${option.value}%)`}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
-            )}
+
+              {/* Manual Tax Rate Input if "Outro" selected */}
+              {regime == "outro" && (
+                <div className="space-y-2 animate-in fade-in slide-in-from-top-2">
+                  <Label htmlFor="aliquota-manual">
+                    Alíquota de Imposto Estimada (%)
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      id="aliquota-manual"
+                      type="number"
+                      value={aliquotaManual}
+                      onChange={(e) =>
+                        setAliquotaManual(Number(e.target.value))
+                      }
+                      className="pl-3 pr-8"
+                    />
+                    <Percent className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
+
+        {/* 4. Regime Tributário */}
 
         {/* --- Right Column: Results --- */}
         <div className="lg:col-span-5 relative mt-6 lg:mt-0">
