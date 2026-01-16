@@ -39,7 +39,7 @@ export default function Calculator() {
   const taxOptions = [
     { id: "simples", label: "Simples Nacional", value: 12 },
     { id: "lucro-presumido", label: "Lucro Presumido", value: 16 },
-    { id: "outro", label: "Outro (Personalizado)", value: 0 },
+    { id: "outro", label: "Outro", value: 0 },
   ];
 
   // Busca o valor baseado no ID selecionado
@@ -90,9 +90,9 @@ export default function Calculator() {
   const neonGreen = "#29ff00";
 
   return (
-    <div className="flex flex-col md:flex-row gap-8 items-center">
+    <div className="flex flex-col md:flex-row gap-8 items-start">
       {/* --- Left Column: Inputs --- */}
-      <div className="lg:col-span-7 space-y-8">
+      <div className="space-y-8">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <CalculatorIcon className="w-8 h-8" style={{ color: neonGreen }} />
@@ -130,9 +130,7 @@ export default function Calculator() {
             <div className="grid grid-cols-1 md:grid-cols-2 pt-6 gap-6">
               {/* 2. Taxa Maquininha */}
               <div className="space-y-2">
-                <Label htmlFor="taxa-maquina">
-                  Taxa Média da Maquininha (%)
-                </Label>
+                <Label htmlFor="taxa-maquina">Taxa da Maquininha</Label>
                 <div className="relative">
                   <Input
                     id="taxa-maquina"
@@ -148,7 +146,7 @@ export default function Calculator() {
 
               {/* 3. Repasse aos Parceiros */}
               <div className="space-y-2">
-                <Label htmlFor="repasse">Repasse aos Parceiros (%)</Label>
+                <Label htmlFor="repasse">Repasse aos Parceiros </Label>
                 <div className="relative">
                   <Input
                     id="repasse"
@@ -185,9 +183,7 @@ export default function Calculator() {
               {/* Manual Tax Rate Input if "Outro" selected */}
               {regime == "outro" && (
                 <div className="space-y-2 animate-in fade-in slide-in-from-top-2">
-                  <Label htmlFor="aliquota-manual">
-                    Alíquota de Imposto Estimada (%)
-                  </Label>
+                  <Label htmlFor="aliquota-manual">Alíquota de Imposto</Label>
                   <div className="relative">
                     <Input
                       id="aliquota-manual"
