@@ -179,7 +179,7 @@ export default function Calculator() {
           </CardHeader>
           <CardContent className="text-center space-y-8">
             {/* Monthly Savings Items */}
-            <div className="space-y-3 flex justify-evenly">
+            <div className="space-y-3 flex flex-col md:flex-row justify-evenly">
               <div>
                 <p className="text-sm font-medium text-muted-foreground mb-1">
                   Total de Impostos sem Split
