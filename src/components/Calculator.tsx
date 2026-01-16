@@ -44,7 +44,8 @@ export default function Calculator() {
   const oldTaxValue = netvalue * toPercent(taxValue);
   const newTaxValue = netvalue * (1 - toPercent(split)) * toPercent(taxValue);
 
-  const yearlyProfit = (oldTaxValue - newTaxValue) * 12;
+  const monthlyProfit = oldTaxValue - newTaxValue;
+  const yearlyProfit = monthlyProfit * 12;
 
   const neonGreen = "#29ff00";
 
@@ -178,17 +179,15 @@ export default function Calculator() {
           </CardHeader>
           <CardContent className="text-center space-y-8">
             {/* Monthly Savings Items */}
-            <div className="space-y-6">
+            <div className="space-y-3 flex justify-evenly">
               <div>
                 <p className="text-sm font-medium text-muted-foreground mb-1">
                   Total de Impostos sem Split
                 </p>
-                <span className="text-3xl font-bold wrap-break-word">
+                <span className="text-3xl font-bold text-red-400 wrap-break-word">
                   - {formatCurrency(oldTaxValue)}
                 </span>
               </div>
-
-              <Separator className="bg-border/40" />
 
               <div>
                 <p className="text-sm font-medium text-muted-foreground mb-1">
@@ -202,8 +201,19 @@ export default function Calculator() {
 
             <Separator className="bg-border/60" />
 
+            <div>
+              <p className="text-sm uppercase tracking-wider font-semibold text-muted-foreground mb-2">
+                No seu bolso em 1 mês
+              </p>
+              <span className="text-4xl font-bold italic wrap-break-word">
+                + {formatCurrency(monthlyProfit)}
+              </span>
+            </div>
+
+            <Separator className="bg-border/60" />
+
             {/* Weekly/Annual Total */}
-            <div className="pt-2">
+            <div>
               <p className="text-sm uppercase tracking-wider font-semibold text-muted-foreground mb-2">
                 No seu bolso em 1 ano
               </p>
