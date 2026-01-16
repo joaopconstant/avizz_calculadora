@@ -4,9 +4,11 @@ import Calculator from "@/components/Calculator";
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <Calculator />
-    </ThemeProvider>
+    <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center  font-sans selection:bg-[#29ff00] selection:text-black">
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <Calculator />
+      </ThemeProvider>
+    </div>
   );
 }
 
