@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { TrendingUp, Percent } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 import {
   Select,
   SelectContent,
@@ -16,12 +18,6 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import {
-  Calculator as CalculatorIcon,
-  TrendingUp,
-  Percent,
-} from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 
 export default function Calculator() {
   const [faturamento, setFaturamento] = useState<number[] | number>([100000]);
@@ -33,8 +29,6 @@ export default function Calculator() {
   const currentRevenue = Array.isArray(faturamento)
     ? faturamento[0]
     : faturamento;
-
-  // --- 2. Logic & Calculations ---
 
   const taxOptions = [
     { id: "simples", label: "Simples Nacional", value: 12 },
@@ -90,15 +84,14 @@ export default function Calculator() {
   const neonGreen = "#29ff00";
 
   return (
-    <div className="flex flex-col md:flex-row gap-8 items-start">
+    <div className="w-full flex flex-col md:flex-row gap-4 md:gap-8 items-start pb-8">
       {/* --- Left Column: Inputs --- */}
-      <div className="space-y-8">
+      <div className="w-full max-w-2xl space-y-8">
         <div>
-          <h1 className="text-3xl font-bold flex items-center gap-3">
-            <CalculatorIcon className="w-8 h-8" style={{ color: neonGreen }} />
+          <h1 className="text-3xl text-center font-bold flex items-center gap-3">
             Calculadora de Potencial Financeiro
           </h1>
-          <p className="text-muted-foreground mt-2 text-lg">
+          <p className="text-muted-foreground mt-2 text-center">
             Descubra quanto dinheiro você está deixando na mesa. Simule o
             impacto do Split de Pagamentos na sua operação.
           </p>
@@ -106,7 +99,7 @@ export default function Calculator() {
 
         <div className="space-y-6">
           {/* 1. Faturamento Mensal */}
-          <div className="space-y-4 bg-card/50 p-6 rounded-xl border border-border/50 shadow-sm">
+          <div className="space-y-4 bg-card/50 p-6 pb-11 rounded-xl border border-border/50 shadow-sm">
             <div className="flex flex-col md:flex-row justify-between items-center">
               <Label className="text-lg font-medium">
                 Faturamento Mensal Estimado
@@ -204,13 +197,9 @@ export default function Calculator() {
       </div>
 
       {/* --- Right Column: Results --- */}
-      <div className="lg:col-span-5 mt-6 lg:mt-0">
+      <div className="w-full min-w-[320px] mt-6 lg:mt-0 ">
         <Card className="border-border/10 bg-card/50 backdrop-blur-sm shadow-2xl overflow-hidden">
           {/* Glow effect at top right */}
-          <div
-            className="absolute -top-20 -right-20 w-40 h-40 rounded-full blur-3xl opacity-20 pointer-events-none"
-            style={{ backgroundColor: neonGreen }}
-          />
 
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-[#29ff00]">
@@ -228,7 +217,7 @@ export default function Calculator() {
                 <p className="text-sm font-medium text-muted-foreground mb-1">
                   Economia Mensal de Impostos
                 </p>
-                <span className="text-3xl font-bold">
+                <span className="text-3xl font-bold wrap-break-word">
                   {formatCurrency(economiaImpostos)}
                 </span>
               </div>
@@ -239,7 +228,7 @@ export default function Calculator() {
                 <p className="text-sm font-medium text-muted-foreground mb-1">
                   Economia Mensal com Taxas de Cartão
                 </p>
-                <span className="text-3xl font-bold">
+                <span className="text-3xl font-bold wrap-break-word">
                   {formatCurrency(economiaTaxas)}
                 </span>
               </div>
@@ -253,7 +242,7 @@ export default function Calculator() {
                 No seu bolso em 1 ano
               </p>
               <div
-                className="text-5xl italic font-extrabold tracking-tight"
+                className="text-[40px] lg:text-5xl italic font-extrabold tracking-tight wrap-break-word"
                 style={{
                   color: neonGreen,
                   textShadow: `0 0 20px ${neonGreen}40`,
