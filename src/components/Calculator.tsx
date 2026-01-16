@@ -18,6 +18,7 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import { toPercent } from "@/lib/utils";
 
 export default function Calculator() {
   const [faturamento, setFaturamento] = useState<number[] | number>([100000]);
@@ -39,38 +40,18 @@ export default function Calculator() {
   // Busca o valor baseado no ID selecionado
   const selectedOption = taxOptions.find((opt) => opt.id === regime);
 
-  // Se for "outro", usa o valor manual. Se não, usa o valor da opção ou o padrão de 15%.
+  // Se for "outro", usa o valor manual. Se não, usa o valor da opção ou o padrão de 12%.
   const currentTaxValue =
     regime === "outro" ? aliquotaManual : selectedOption?.value || 12;
-  const taxRate = currentTaxValue / 100;
-  const machineRate = taxaMaquina / 100;
-  const splitRate = repasse / 100;
 
-  // Imposto sobre TUDO
-  const impostoSemSplit = currentRevenue * taxRate;
-  // Taxa Maquininha sobre TUDO
-  const taxaMaquinaSemSplit = currentRevenue * machineRate;
+  const valorLiquido = currentRevenue - currentRevenue * toPercent(taxaMaquina);
 
-  // Receita Real = Faturamento * (100% - % Repasse) -> Parte que fica na empresa
-  // O imposto incide apenas sobre a parte dele (Receita Real)
-  const receitaReal = currentRevenue * (1 - splitRate);
+  const impostoSemSplit = valorLiquido * toPercent(currentTaxValue);
 
-  const impostoComSplit = receitaReal * taxRate;
+  const impostoComSplit =
+    valorLiquido * (1 - toPercent(repasse)) * toPercent(currentTaxValue);
 
-  // Taxa Maquininha (Sua Parte) = Receita Real * Taxa Maquina
-  const taxaMaquinaComSplit = receitaReal * machineRate;
-
-  // --- 3. Results ---
-
-  // A) Economia Mensal de Impostos
-  const economiaImpostos = impostoSemSplit - impostoComSplit;
-
-  // B) Economia com Taxas de Cartão
-  // "Lógica: Aqui mostramos que ele parou de pagar a taxa do cartão sobre o dinheiro do parceiro."
-  const economiaTaxas = taxaMaquinaSemSplit - taxaMaquinaComSplit;
-
-  // C) RESULTADO FINAL: Lucro Extra Anual
-  const lucroExtraAnual = (economiaImpostos + economiaTaxas) * 12;
+  const economiaAnual = (impostoSemSplit - impostoComSplit) * 12;
 
   // --- Formatting ---
   const formatCurrency = (value: number) => {
@@ -91,7 +72,7 @@ export default function Calculator() {
           <h1 className="text-3xl text-center font-bold flex items-center gap-3">
             Calculadora de Potencial Financeiro
           </h1>
-          <p className="text-muted-foreground mt-2 text-center">
+          <p className="text-muted-foreground mt-2 text-start">
             Descubra quanto dinheiro você está deixando na mesa. Simule o
             impacto do Split de Pagamentos na sua operação.
           </p>
@@ -112,7 +93,7 @@ export default function Calculator() {
               value={[currentRevenue]}
               min={0}
               max={2000000}
-              step={1000}
+              step={10000}
               onValueChange={(val) => setFaturamento(val)}
               className="pt-4 cursor-pointer"
             />
@@ -215,10 +196,10 @@ export default function Calculator() {
             <div className="space-y-6">
               <div>
                 <p className="text-sm font-medium text-muted-foreground mb-1">
-                  Economia Mensal de Impostos
+                  Total de Impostos sem Split
                 </p>
                 <span className="text-3xl font-bold wrap-break-word">
-                  {formatCurrency(economiaImpostos)}
+                  - {formatCurrency(impostoSemSplit)}
                 </span>
               </div>
 
@@ -226,10 +207,10 @@ export default function Calculator() {
 
               <div>
                 <p className="text-sm font-medium text-muted-foreground mb-1">
-                  Economia Mensal com Taxas de Cartão
+                  Total de Impostos com Split
                 </p>
                 <span className="text-3xl font-bold wrap-break-word">
-                  {formatCurrency(economiaTaxas)}
+                 - {formatCurrency(impostoComSplit)}
                 </span>
               </div>
             </div>
@@ -248,7 +229,7 @@ export default function Calculator() {
                   textShadow: `0 0 20px ${neonGreen}40`,
                 }}
               >
-                {formatCurrency(lucroExtraAnual)}
+                + {formatCurrency(economiaAnual)}
               </div>
               <p className="text-sm text-muted-foreground mt-4 leading-relaxed">
                 Em um ano, você coloca esse valor a mais no bolso sem precisar
